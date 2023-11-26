@@ -11,92 +11,6 @@ import (
 
 const url = "https://api.open-meteo.com/v1/forecast"
 
-type Weather struct {
-	Client http.Client
-	Params ForecastParams
-}
-
-type ForecastParams struct {
-	latitude      float64
-	longitude     float64
-	elevation     float64
-	hourly        []string
-	daily         []string
-	current       []string
-	tempUnit      string
-	windSpeedUnit string
-	precipUnit    string
-	timeFormat    string
-	timeZone      string
-	pastDays      int64
-	forecastDays  int64
-	startDate     string
-	endDate       string
-}
-
-type ForecastResponse struct {
-	Latitude     float64            `json:"latitude"`
-	Longitude    float64            `json:"longitude"`
-	Elevation    float64            `json:"elevation,omitempty"`
-	GenTimeMs    float64            `json:"generationtime_ms"`
-	UtcOffset    int64              `json:"utc_offset_seconds"`
-	Timezone     string             `json:"timezone"`
-	TimezoneAbbr string             `json:"timezone_abbreviation"`
-	HourlyData   HourlyResponse     `json:"hourly"`
-	HourlyUnits  HourUnitsResponse  `json:"hourly_units"`
-	DailyData    DailyResponse      `json:"daily"`
-	DailyUnits   DailyUnitsResponse `json:"daily_units"`
-}
-
-type HourlyResponse struct {
-	Time                []string  `json:"time"`
-	Temperature         []float64 `json:"temperature_2m"`
-	RelativeHumidity    []float64 `json:"relative_humidity_2m"`
-	ApparentTemperature []float64 `json:"apparent_temperature"`
-	CloudCover          []float64 `json:"cloud_cover"`
-	WindSpeed           []float64 `json:"wind_speed_10m"`
-	WindDirection       []string  `json:"wind_direction_10m"`
-	WindGusts           []float64 `json:"wind_gusts_10m"`
-	Precipitation       []float64 `json:"precipitation"`
-	WeatherCode         []float64 `json:"weather_code"`
-}
-
-type HourUnitsResponse struct {
-	Temperature         string `json:"temperature_2m"`
-	RelativeHumidity    string `json:"relative_humidity_2m"`
-	ApparentTemperature string `json:"apparent_temperature"`
-	CloudCover          string `json:"cloud_cover"`
-	WindSpeed           string `json:"wind_speed_10m"`
-	WindDirection       string `json:"wind_direction_10m"`
-	WindGusts           string `json:"wind_gusts_10m"`
-	Precipitation       string `json:"precipitation"`
-	WeatherCode         string `json:"weather_code"`
-}
-
-type DailyResponse struct {
-	Temperature_Max              []float64 `json:"temperature_2m_max"`
-	TemperatureMin               []float64 `json:"temperature_2m_min"`
-	PrecipitationTotal           []float64 `json:"precipitation_sum"`
-	PrecipitationProbabilityMean []float64 `json:"precipitation_probability_mean"`
-	WeatherCode                  []float64 `json:"weather_code"`
-	Sunrise                      []string  `json:"sunrise"`
-	Sunset                       []string  `json:"sunset"`
-	WindSpeedMax                 []float64 `json:"wind_speed_10m_max"`
-	WindGustsMax                 []float64 `json:"wind_gusts_10m_max"`
-}
-
-type DailyUnitsResponse struct {
-	Temperature_Max              string `json:"temperature_2m_max"`
-	TemperatureMin               string `json:"temperature_2m_min"`
-	PrecipitationTotal           string `json:"precipitation_sum"`
-	PrecipitationProbabilityMean string `json:"precipitation_probability_mean"`
-	WeatherCode                  string `json:"weather_code"`
-	Sunrise                      string `json:"sunrise"`
-	Sunset                       string `json:"sunset"`
-	WindSpeedMax                 string `json:"wind_speed_10m_max"`
-	WindGustsMax                 string `json:"wind_gusts_10m_max"`
-}
-
 func NewForecastParams() ForecastParams {
 	fp := ForecastParams{}
 
@@ -140,10 +54,8 @@ func NewForecastParams() ForecastParams {
 	fp.precipUnit = "inch"
 	fp.timeFormat = "iso8601"
 	fp.timeZone = "CST"
-	fp.pastDays = 0
-	fp.forecastDays = 7
-	fp.startDate = time.Now().Format("2023-01-01")
-	fp.endDate = time.Now().Local().Add(7 * 24 * time.Hour).GoString()
+	fp.startDate = time.Now().Format("2006-01-02")
+	fp.endDate = time.Now().Local().Add(7 * 24 * time.Hour).Format("2006-01-02")
 
 	return fp
 }
@@ -169,8 +81,6 @@ func (w Weather) GetData() ForecastResponse {
 	q.Add("precipitation_unit", w.Params.precipUnit)
 	q.Add("timeformat", w.Params.timeFormat)
 	q.Add("timezone", w.Params.timeZone)
-	q.Add("past_days", fmt.Sprintf("%v", w.Params.pastDays))
-	q.Add("forecast_days", fmt.Sprintf("%v", w.Params.forecastDays))
 	q.Add("start_date", w.Params.startDate)
 	q.Add("end_date", w.Params.endDate)
 
@@ -189,8 +99,48 @@ func (w Weather) GetData() ForecastResponse {
 	err = json.NewDecoder(resp.Body).Decode(&target)
 
 	if err != nil {
-		log.Println(err)
+		fmt.Println("response packing error")
+		fmt.Println(err)
 	}
 
 	return target
+}
+
+func (w Weather) FormatData(fr ForecastResponse) Forecast {
+	f := Forecast{}
+
+	for i := 0; i < 11; i++ {
+		h := HourlyForecast{}
+		h.Temp = fmt.Sprintf("%v\u0xB0", fr.HourlyData.Temperature[i])
+		h.ApparentTemp = fmt.Sprintf("%v%v", fr.HourlyData.ApparentTemperature[i], fr.HourlyUnits.ApparentTemperature[0])
+		h.CloudCover = fmt.Sprintf("%v%v", fr.HourlyData.CloudCover[i], fr.HourlyUnits.CloudCover[0])
+		h.Humidity = fmt.Sprintf("%v%v", fr.HourlyData.RelativeHumidity[i], fr.HourlyUnits.RelativeHumidity[0])
+		h.Precip = fmt.Sprintf("%v%v", fr.HourlyData.Precipitation[i], fr.HourlyUnits.Precipitation[0])
+		h.WeatherCode = fmt.Sprintf("%v%v", fr.HourlyData.WeatherCode[i], fr.HourlyUnits.WeatherCode[0])
+		h.WindDirection = fmt.Sprintf("%v%v", fr.HourlyData.WindDirection[i], fr.HourlyUnits.WindDirection[0])
+		h.WindGusts = fmt.Sprintf("%v%v", fr.HourlyData.WindGusts[i], fr.HourlyUnits.WindGusts[0])
+		h.WindSpeed = fmt.Sprintf("%v%v", fr.HourlyData.WindSpeed[i], fr.HourlyUnits.WindSpeed[0])
+
+		f.Hourly = append(f.Hourly, h)
+		fmt.Println(h)
+	}
+
+	for j := 0; j < 7; j++ {
+		d := DailyForecast{}
+
+		d.TempMax = fmt.Sprintf("%v%v", fr.DailyData.TemperatureMax[j], fr.DailyUnits.TemperatureMax[0])
+		d.TempMin = fmt.Sprintf("%v%v", fr.DailyData.TemperatureMin[j], fr.DailyUnits.TemperatureMin[0])
+		d.PrecipProbability = fmt.Sprintf("%v%v", fr.DailyData.PrecipitationProbabilityMean[j], fr.DailyUnits.PrecipitationProbabilityMean[0])
+		d.PrecipTotal = fmt.Sprintf("%v%v", fr.DailyData.PrecipitationTotal[j], fr.DailyUnits.PrecipitationTotal[0])
+		d.Sunrise = fmt.Sprintf("%v%v", fr.DailyData.Sunrise[j], fr.DailyUnits.Sunrise[0])
+		d.Sunset = fmt.Sprintf("%v%v", fr.DailyData.Sunset[j], fr.DailyUnits.Sunset[0])
+		d.WeatherCode = fmt.Sprintf("%v%v", fr.DailyData.WeatherCode[j], fr.DailyUnits.WeatherCode[0])
+		d.WindGustsMax = fmt.Sprintf("%v%v", fr.DailyData.WindGustsMax[j], fr.DailyUnits.WindGustsMax[0])
+		d.WindSpeedMax = fmt.Sprintf("%v%v", fr.DailyData.WindSpeedMax[j], fr.DailyUnits.WindSpeedMax[0])
+
+		f.Daily = append(f.Daily, d)
+		fmt.Println(d)
+	}
+
+	return f
 }

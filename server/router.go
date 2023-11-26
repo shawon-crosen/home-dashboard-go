@@ -21,8 +21,8 @@ func setRouter() *gin.Engine {
 
 		api.GET("/weather", func(ctx *gin.Context) {
 			w := weather.Weather{Client: http.Client{}, Params: weather.NewForecastParams()}
-			forecast := w.GetData()
-			ctx.JSON(200, forecast)
+			forecastResp := w.GetData()
+			ctx.JSON(200, w.FormatData(forecastResp))
 		})
 	}
 
