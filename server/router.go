@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/shawon-crosen/dashboard-go/cta"
 	"github.com/shawon-crosen/dashboard-go/weather"
 )
 
@@ -23,6 +24,12 @@ func setRouter() *gin.Engine {
 			w := weather.Weather{Client: http.Client{}, Params: weather.NewForecastParams()}
 			forecastResp := w.GetData()
 			ctx.JSON(200, w.FormatData(forecastResp))
+		})
+
+		api.GET("/cta", func(ctx *gin.Context) {
+			t := cta.Station{Client: http.Client{}, Id: 41400}
+			tResp := t.GetTrains()
+			ctx.JSON(200, t.FormatData(tResp))
 		})
 	}
 
