@@ -27,9 +27,9 @@ func setRouter() *gin.Engine {
 		})
 
 		api.GET("/cta", func(ctx *gin.Context) {
-			t := cta.Station{Client: http.Client{}, Id: 41340}
+			t := cta.Station{Client: http.Client{}, Id: 41400}
 			tResp := t.GetTrains()
-			ctx.JSON(200, tResp)
+			ctx.JSON(200, t.FormatData(tResp))
 		})
 	}
 
