@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/shawon-crosen/dashboard-go/weather"
 )
 
 func setRouter() *gin.Engine {
@@ -16,6 +17,12 @@ func setRouter() *gin.Engine {
 		// Add /hello GET route to router and define route handler function
 		api.GET("/hello", func(ctx *gin.Context) {
 			ctx.JSON(200, gin.H{"msg": "world"})
+		})
+
+		api.GET("/weather", func(ctx *gin.Context) {
+			w := weather.Weather{Client: http.Client{}, Params: weather.NewForecastParams()}
+			forecast := w.GetData()
+			ctx.JSON(200, forecast)
 		})
 	}
 
