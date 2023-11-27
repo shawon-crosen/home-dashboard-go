@@ -4,9 +4,14 @@ import (
 	"net/http"
 )
 
-type Station struct {
-	Client http.Client
-	Id     int
+type AllTrains struct {
+	Stations []int
+	ApiKey   string
+	Client   http.Client
+}
+
+type AllTrainsData struct {
+	StationResponse []StationData
 }
 
 type StationResponse struct {

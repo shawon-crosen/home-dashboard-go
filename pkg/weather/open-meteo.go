@@ -7,15 +7,17 @@ import (
 	"net/http"
 	"strings"
 	"time"
+
+	"github.com/shawon-crosen/dashboard-go/pkg/config"
 )
 
 const url = "https://api.open-meteo.com/v1/forecast"
 
-func NewForecastParams() ForecastParams {
+func NewForecastParams(conf config.WeatherConfig) ForecastParams {
 	fp := ForecastParams{}
 
-	fp.latitude = 41.88
-	fp.longitude = -87.62
+	fp.latitude = conf.Latitude
+	fp.longitude = conf.Longitude
 	fp.hourly = []string{
 		"temperature_2m",
 		"relative_humidity_2m",
@@ -49,11 +51,11 @@ func NewForecastParams() ForecastParams {
 		"precipitation",
 		"weather_code",
 	}
-	fp.tempUnit = "fahrenheit"
-	fp.windSpeedUnit = "mph"
-	fp.precipUnit = "inch"
+	fp.tempUnit = conf.TempUnit
+	fp.windSpeedUnit = conf.WindSpeedUnit
+	fp.precipUnit = conf.PrecipUnit
 	fp.timeFormat = "iso8601"
-	fp.timeZone = "CST"
+	fp.timeZone = conf.TimeZone
 	fp.startDate = time.Now().Format("2006-01-02")
 	fp.endDate = time.Now().Local().Add(7 * 24 * time.Hour).Format("2006-01-02")
 
@@ -111,8 +113,6 @@ func (w Weather) GetData() ForecastResponse {
 
 	req.URL.RawQuery = q.Encode()
 
-	fmt.Println(req.URL.String())
-
 	resp, err := w.Client.Get(req.URL.String())
 
 	if err != nil {
@@ -124,8 +124,7 @@ func (w Weather) GetData() ForecastResponse {
 	err = json.NewDecoder(resp.Body).Decode(&target)
 
 	if err != nil {
-		fmt.Println("response packing error")
-		fmt.Println(err)
+		log.Println(err)
 	}
 
 	return target
@@ -147,7 +146,6 @@ func (w Weather) FormatData(fr ForecastResponse) Forecast {
 		h.WindSpeed = fmt.Sprintf("%v %v", fr.HourlyData.WindSpeed[i], fr.HourlyUnits.WindSpeed)
 
 		f.Hourly = append(f.Hourly, h)
-		fmt.Println(h)
 	}
 
 	for j := 0; j < 7; j++ {
@@ -164,7 +162,6 @@ func (w Weather) FormatData(fr ForecastResponse) Forecast {
 		d.WindSpeedMax = fmt.Sprintf("%v %v", fr.DailyData.WindSpeedMax[j], fr.DailyUnits.WindSpeedMax)
 
 		f.Daily = append(f.Daily, d)
-		fmt.Println(d)
 	}
 
 	return f
