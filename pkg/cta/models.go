@@ -11,7 +11,7 @@ type AllTrains struct {
 }
 
 type AllTrainsData struct {
-	StationResponse []StationData
+	StationResponse []TrainData
 }
 
 type StationResponse struct {
@@ -44,11 +44,6 @@ type Eta struct {
 	Latitude            string `json:"lat"`
 	Longitude           string `json:"lon"`
 	Heading             string `json:"heading"`
-}
-
-type StationData struct {
-	North map[string][]TrainData
-	South map[string][]TrainData
 }
 
 type TrainData struct {

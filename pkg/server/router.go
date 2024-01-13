@@ -16,16 +16,59 @@ func setRouter(conf []byte) *gin.Engine {
 	// Create API route group
 	api := router.Group("/api")
 	{
-		api.GET("/weather", func(ctx *gin.Context) {
-			w := weather.Weather{Client: http.Client{}, Params: weather.NewForecastParams(configData.WeatherConfig)}
-			forecastResp := w.GetData()
-			ctx.JSON(200, w.FormatData(forecastResp))
-		})
+		forecast := api.Group("/weather")
+		{
+			hourly := forecast.Group("/hourly")
+			{
+				hourly.GET("/", func(ctx *gin.Context) {
+					w := weather.Weather{Client: http.Client{}, Params: weather.NewForecastParams(configData.WeatherConfig)}
+					forecastResp := w.GetData("hourly")
+					if forecastResp != nil {
+						ctx.JSON(200, w.FormatData(*forecastResp, "hourly"))
+					} else {
+						ctx.JSON(500, "A server error has occured")
+					}
+
+				})
+			}
+
+			daily := forecast.Group("/daily")
+			{
+				daily.GET("/", func(ctx *gin.Context) {
+					w := weather.Weather{Client: http.Client{}, Params: weather.NewForecastParams(configData.WeatherConfig)}
+					forecastResp := w.GetData("daily")
+					if forecastResp != nil {
+						ctx.JSON(200, w.FormatData(*forecastResp, "daily"))
+					} else {
+						ctx.JSON(500, "A server error has occured")
+					}
+
+				})
+			}
+
+			current := forecast.Group("/current")
+			{
+				current.GET("/", func(ctx *gin.Context) {
+					w := weather.Weather{Client: http.Client{}, Params: weather.NewForecastParams(configData.WeatherConfig)}
+					forecastResp := w.GetData("current")
+					if forecastResp != nil {
+						ctx.JSON(200, w.FormatData(*forecastResp, "current"))
+					} else {
+						ctx.JSON(500, "A server error has occured")
+					}
+
+				})
+			}
+		}
 
 		api.GET("/cta", func(ctx *gin.Context) {
 			trains := cta.AllTrains{Client: http.Client{}, ApiKey: configData.CtaConfig.Api_key, Stations: configData.CtaConfig.Stations}
 			tResp := trains.GetTrains()
-			ctx.JSON(200, trains.FormatData(tResp))
+			if tResp != nil {
+				ctx.JSON(200, trains.FormatData(*tResp))
+			} else {
+				ctx.JSON(500, "A server error has occured")
+			}
 		})
 	}
 

@@ -12,7 +12,7 @@ import (
 
 const url = "http://lapi.transitchicago.com/api/1.0/ttarrivals.aspx"
 
-func (at AllTrains) GetTrains() []StationResponse {
+func (at AllTrains) GetTrains() *[]StationResponse {
 
 	stationData := []StationResponse{}
 
@@ -36,6 +36,7 @@ func (at AllTrains) GetTrains() []StationResponse {
 
 		if err != nil {
 			log.Println(err)
+			return nil
 		}
 
 		defer resp.Body.Close()
@@ -49,7 +50,7 @@ func (at AllTrains) GetTrains() []StationResponse {
 		stationData = append(stationData, target)
 	}
 
-	return stationData
+	return &stationData
 }
 
 func (at AllTrains) FormatData(sr []StationResponse) AllTrainsData {
@@ -57,14 +58,7 @@ func (at AllTrains) FormatData(sr []StationResponse) AllTrainsData {
 	atd := AllTrainsData{}
 	for _, s := range sr {
 
-		td := StationData{}
-		nRoutes := make(map[string][]TrainData)
-		sRoutes := make(map[string][]TrainData)
-
-		// for _, t := range sr.Root.Etas {
-		// 	routes[t.RouteColor] = []TrainData{}
-		// }
-
+		td := []TrainData{}
 		for _, t := range s.Root.Etas {
 			r := TrainData{}
 
@@ -90,19 +84,10 @@ func (at AllTrains) FormatData(sr []StationResponse) AllTrainsData {
 			r.ArrivalTime = t.ArrivalTime
 
 			r.ArrivalMinutes = parseArrival(t.ArrivalTime)
-
-			switch t.Directioncode {
-			case "1":
-				nRoutes[t.RouteColor] = append(nRoutes[t.RouteColor], r)
-			case "5":
-				sRoutes[t.RouteColor] = append(sRoutes[t.RouteColor], r)
-			}
+			td = append(td, r)
 		}
 
-		td.North = nRoutes
-		td.South = sRoutes
-
-		atd.StationResponse = append(atd.StationResponse, td)
+		atd.StationResponse = td
 	}
 
 	return atd
