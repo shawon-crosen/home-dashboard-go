@@ -24,8 +24,26 @@ function FetchHourlyWeather() {
 
   return(
     <ul>
-      {JSON.stringify(data.Hourly)}
+      JSON.stringify({data.Hourly})
     </ul>
+    // <div>
+    //   {data.Hourly.map((hourly) => {
+    //     return(
+    //       <div key={hourly.Time} class="hourly-forecast">
+    //         <p>{hourly.Time}</p>
+    //         <p>{hourly.Temperature}</p>
+    //         <p>{hourly.RelativeHumidity}</p>
+    //         <p>{hourly.ApparentTemperature}</p>
+    //         <p>{hourly.CloudCover}</p>
+    //         <p>{hourly.WindSpeed}</p>
+    //         <p>{hourly.WindDirection}</p>
+    //         <p>{hourly.WindGusts}</p>
+    //         <p>{hourly.Precipitation}</p>
+    //         <p>{hourly.WeatherCode}</p>
+    //       </div>
+    //     )
+    //   })}
+    // </div>
   )
 }
 
@@ -94,7 +112,7 @@ function App() {
       <QueryClientProvider client={hourlyWeatherClient}>
         <FetchHourlyWeather />
       </QueryClientProvider>
-      <QueryClientProvider client={dailyWeatherClient}>
+      {/* <QueryClientProvider client={dailyWeatherClient}>
         <FetchDailyWeather />
       </QueryClientProvider>
       <QueryClientProvider client={currentWeatherClient}>
@@ -102,7 +120,7 @@ function App() {
       </QueryClientProvider>
       <QueryClientProvider client={trainClient}>
         <FetchTrains />
-      </QueryClientProvider>
+      </QueryClientProvider> */}
     </div>
   );
 }

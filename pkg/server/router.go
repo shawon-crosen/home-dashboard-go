@@ -20,7 +20,7 @@ func setRouter(conf []byte) *gin.Engine {
 		{
 			hourly := forecast.Group("/hourly")
 			{
-				hourly.GET("/", func(ctx *gin.Context) {
+				hourly.GET("", func(ctx *gin.Context) {
 					w := weather.Weather{Client: http.Client{}, Params: weather.NewForecastParams(configData.WeatherConfig)}
 					forecastResp := w.GetData("hourly")
 					if forecastResp != nil {
@@ -34,7 +34,7 @@ func setRouter(conf []byte) *gin.Engine {
 
 			daily := forecast.Group("/daily")
 			{
-				daily.GET("/", func(ctx *gin.Context) {
+				daily.GET("", func(ctx *gin.Context) {
 					w := weather.Weather{Client: http.Client{}, Params: weather.NewForecastParams(configData.WeatherConfig)}
 					forecastResp := w.GetData("daily")
 					if forecastResp != nil {
@@ -48,7 +48,7 @@ func setRouter(conf []byte) *gin.Engine {
 
 			current := forecast.Group("/current")
 			{
-				current.GET("/", func(ctx *gin.Context) {
+				current.GET("", func(ctx *gin.Context) {
 					w := weather.Weather{Client: http.Client{}, Params: weather.NewForecastParams(configData.WeatherConfig)}
 					forecastResp := w.GetData("current")
 					if forecastResp != nil {
