@@ -1,0 +1,49 @@
+.hourly {
+  background: linear-gradient(to bottom right, #60a5fa, #3b82f6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.temp {
+  display:block;
+  font-size: 2.5rem;
+  font-weight: bold;
+}
+
+.humidity {
+  display:block;
+}
+
+.relativehumidity {
+  display:block;
+}
+
+.apparenttemp {
+  display:block;
+}
+
+.cloudcover {
+  display:block;
+}
+
+.windspeed {
+  display:block;
+}
+
+.winddirection {
+  display:block;
+}
+
+.windgusts {
+  display:block;
+}
+
+.precip {
+  display:block;
+}
+
+.weathercode {
+  display:block;
+}

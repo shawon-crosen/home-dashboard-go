@@ -9,7 +9,7 @@ import (
 )
 
 func main() {
-	path, err := filepath.Abs("src/config.yaml")
+	path, err := filepath.Abs("config.yaml")
 	config, err := ioutil.ReadFile(path)
 
 	if err != nil {

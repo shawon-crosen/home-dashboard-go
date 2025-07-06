@@ -4,11 +4,12 @@ import {
   QueryClientProvider,
   useQuery,
 } from '@tanstack/react-query';
+import HourlyWeather from "./HourlyWeatherComponent/HourlyWeather.js"
 
 const hourlyWeatherClient = new QueryClient()
-// const dailyWeatherClient = new QueryClient()
-// const currentWeatherClient = new QueryClient()
-// const trainClient = new QueryClient()
+const dailyWeatherClient = new QueryClient()
+const currentWeatherClient = new QueryClient()
+const trainClient = new QueryClient()
 
 function FetchHourlyWeather() {
   const { isPending, error, data } = useQuery({
@@ -22,25 +23,42 @@ function FetchHourlyWeather() {
 
   if (error) return 'An error has ocurred ' + error.message
 
-  return(
-    <div>
-      {data.Hourly.map((hourly) => {
-        return(
-          <div key={hourly.Time} class="hourly-forecast">
-            <p>{hourly.Temp}</p>
-            <p>{hourly.Humidity}</p>
-            <p>{hourly.ApparentTemp}</p>
-            <p>{hourly.CloudCover}</p>
-            <p>{hourly.WindSpeed}</p>
-            <p>{hourly.WindDirection}</p>
-            <p>{hourly.WindGusts}</p>
-            <p>{hourly.Precip}</p>
-            <p>{hourly.WeatherCode}</p>
-          </div>
-        )
-      })}
-    </div>
-  )
+  return(< HourlyWeather data={data} />)
+  // return(
+  //   <ul class="flex-container">
+  //       {data.Hourly.map((hour, index) => (
+  //         <li class="flex-item" key={index} className={fstyle.hourly}>
+  //           <div>
+  //             Temp: {hour.Temp}
+  //             Humidity: {hour.Humidity}
+  //           </div>
+  //         </li>
+  //     ))}
+  //   </ul>
+    // <div>
+    //   {data.Hourly.map((hour, index) => (
+    //     <ul class="flex-container">
+    //       <li class="flex-item" key={index} className={fstyle.hourly}>
+    //         <div>
+    //           Temp: {hour.Temp}
+    //         </div>
+    //         <div>
+    //           Humidity: {hour.Humidity}
+    //         </div>
+    //       </li>
+    //     </ul>
+    //   ))}
+    // </div>
+    //         <p>{hourly.Time}</p>
+    //         <p>{hourly.Temperature}</p>
+    //         <p>{hourly.RelativeHumidity}</p>
+    //         <p>{hourly.ApparentTemperature}</p>
+    //         <p>{hourly.CloudCover}</p>
+    //         <p>{hourly.WindSpeed}</p>
+    //         <p>{hourly.WindDirection}</p>
+    //         <p>{hourly.WindGusts}</p>
+    //         <p>{hourly.Precipitation}</p>
+    //         <p>{hourly.WeatherCode}</p>
 }
 
 function FetchDailyWeather() {
@@ -106,7 +124,8 @@ function App() {
   return (
     <div className="Dashboard">
       <QueryClientProvider client={hourlyWeatherClient}>
-        <FetchHourlyWeather />
+        <span>Hourly Weather</span>
+        <FetchHourlyWeather/>
       </QueryClientProvider>
       {/* <QueryClientProvider client={dailyWeatherClient}>
         <FetchDailyWeather />
