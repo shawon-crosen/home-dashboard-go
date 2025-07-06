@@ -2,6 +2,7 @@ package weather
 
 import (
 	"net/http"
+	"time"
 )
 
 type Weather struct {
@@ -52,7 +53,7 @@ type HourlyResponse struct {
 	WindSpeed           []float64 `json:"wind_speed_10m"`
 	WindDirection       []float64 `json:"wind_direction_10m"`
 	WindGusts           []float64 `json:"wind_gusts_10m"`
-	Precipitation       []float64 `json:"precipitation"`
+	Precipitation       []float64 `json:"precipitation_probability"`
 	WeatherCode         []float64 `json:"weather_code"`
 }
 
@@ -124,15 +125,26 @@ type Forecast struct {
 }
 
 type HourlyForecast struct {
-	Temp          string
-	Humidity      string
-	ApparentTemp  string
-	CloudCover    string
-	WindSpeed     string
+	Temp          FloatData
+	Humidity      FloatData
+	ApparentTemp  FloatData
+	CloudCover    FloatData
+	WindSpeed     FloatData
 	WindDirection string
-	WindGusts     string
-	Precip        string
-	WeatherCode   string
+	WindGusts     FloatData
+	Precip        FloatData
+	WeatherCode   float64
+	Time          time.Time
+}
+
+type FloatData struct {
+	Value float64
+	Unit  string
+}
+
+type StringData struct {
+	Value string
+	Unit  string
 }
 
 type DailyForecast struct {

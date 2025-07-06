@@ -26,7 +26,7 @@ func NewForecastParams(conf config.WeatherConfig) ForecastParams {
 		"wind_speed_10m",
 		"wind_direction_10m",
 		"wind_gusts_10m",
-		"precipitation",
+		"precipitation_probability",
 		"weather_code",
 	}
 	fp.daily = []string{
@@ -156,15 +156,31 @@ func (w Weather) FormatData(fr ForecastResponse, fType string) Forecast {
 	case fType == "hourly":
 		for i := 0; i < 11; i++ {
 			h := HourlyForecast{}
-			h.Temp = fmt.Sprintf("%v%v", fr.HourlyData.Temperature[i], fr.HourlyUnits.Temperature)
-			h.ApparentTemp = fmt.Sprintf("%v%v", fr.HourlyData.ApparentTemperature[i], fr.HourlyUnits.ApparentTemperature)
-			h.CloudCover = fmt.Sprintf("%v%v", fr.HourlyData.CloudCover[i], fr.HourlyUnits.CloudCover)
-			h.Humidity = fmt.Sprintf("%v%v", fr.HourlyData.RelativeHumidity[i], fr.HourlyUnits.RelativeHumidity)
-			h.Precip = fmt.Sprintf("%v %ves", fr.HourlyData.Precipitation[i], fr.HourlyUnits.Precipitation)
-			h.WeatherCode = fmt.Sprintf("%v", fr.HourlyData.WeatherCode[i])
-			h.WindDirection = fmt.Sprintf("%v", windDirection(fr.HourlyData.WindDirection[i]))
-			h.WindGusts = fmt.Sprintf("%v %v", fr.HourlyData.WindGusts[i], fr.HourlyUnits.WindGusts)
-			h.WindSpeed = fmt.Sprintf("%v %v", fr.HourlyData.WindSpeed[i], fr.HourlyUnits.WindSpeed)
+			fmt.Println(fr.HourlyData)
+			h.Temp.Value = fr.HourlyData.Temperature[i]
+			h.Temp.Unit = fr.HourlyUnits.Temperature
+
+			h.ApparentTemp.Value = fr.HourlyData.ApparentTemperature[i]
+			h.ApparentTemp.Unit = fr.HourlyUnits.ApparentTemperature
+
+			h.CloudCover.Value = fr.HourlyData.CloudCover[i]
+			h.CloudCover.Unit = fr.HourlyUnits.CloudCover
+
+			h.Humidity.Value = fr.HourlyData.RelativeHumidity[i]
+			h.Humidity.Unit = fr.HourlyUnits.RelativeHumidity
+
+			h.Precip.Value = fr.HourlyData.Precipitation[i]
+			h.Precip.Unit = fr.HourlyUnits.Precipitation
+
+			h.WeatherCode = fr.HourlyData.WeatherCode[i]
+
+			h.WindDirection = windDirection(fr.HourlyData.WindDirection[i])
+
+			h.WindGusts.Value = fr.HourlyData.WindGusts[i]
+			h.WindGusts.Unit = fr.HourlyUnits.WindGusts
+
+			h.WindSpeed.Value = fr.HourlyData.WindSpeed[i]
+			h.WindSpeed.Unit = fr.HourlyUnits.WindSpeed
 
 			f.Hourly = append(f.Hourly, h)
 		}
