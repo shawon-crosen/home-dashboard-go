@@ -118,9 +118,15 @@ type CurrentUnitsResponse struct {
 	WeatherCode         string `json:"weather_code"`
 }
 
-type Forecast struct {
-	Hourly  []HourlyForecast
-	Daily   []DailyForecast
+type HourlyPayload struct {
+	Hourly []HourlyForecast
+}
+
+type DailyPayload struct {
+	Daily []DailyForecast
+}
+
+type CurrentPayload struct {
 	Current CurrentForecast
 }
 
@@ -134,7 +140,7 @@ type HourlyForecast struct {
 	WindGusts     FloatData
 	Precip        FloatData
 	WeatherCode   float64
-	Time          time.Time
+	Time          string
 }
 
 type FloatData struct {
@@ -142,31 +148,26 @@ type FloatData struct {
 	Unit  string
 }
 
-type StringData struct {
-	Value string
-	Unit  string
-}
-
 type DailyForecast struct {
-	TempMax           string
-	TempMin           string
-	PrecipTotal       string
-	PrecipProbability string
-	WeatherCode       string
-	Sunrise           string
-	Sunset            string
-	WindSpeedMax      string
-	WindGustsMax      string
+	TempMax           FloatData
+	TempMin           FloatData
+	PrecipTotal       FloatData
+	PrecipProbability FloatData
+	WeatherCode       float64
+	Sunrise           time.Time
+	Sunset            time.Time
+	WindSpeedMax      FloatData
+	WindGustsMax      FloatData
 }
 
 type CurrentForecast struct {
-	Temp          string
-	Humidity      string
-	ApparentTemp  string
-	CloudCover    string
-	WindSpeed     string
+	Temp          FloatData
+	Humidity      FloatData
+	ApparentTemp  FloatData
+	CloudCover    FloatData
+	WindSpeed     FloatData
 	WindDirection string
-	WindGusts     string
-	Precip        string
-	WeatherCode   string
+	WindGusts     FloatData
+	Precip        FloatData
+	WeatherCode   float64
 }

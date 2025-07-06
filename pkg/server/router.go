@@ -24,7 +24,7 @@ func setRouter(conf []byte) *gin.Engine {
 					w := weather.Weather{Client: http.Client{}, Params: weather.NewForecastParams(configData.WeatherConfig)}
 					forecastResp := w.GetData("hourly")
 					if forecastResp != nil {
-						ctx.JSON(200, w.FormatData(*forecastResp, "hourly"))
+						ctx.JSON(200, w.FormatHourlyData(*forecastResp, "hourly"))
 					} else {
 						ctx.JSON(500, "A server error has occured")
 					}
@@ -38,7 +38,7 @@ func setRouter(conf []byte) *gin.Engine {
 					w := weather.Weather{Client: http.Client{}, Params: weather.NewForecastParams(configData.WeatherConfig)}
 					forecastResp := w.GetData("daily")
 					if forecastResp != nil {
-						ctx.JSON(200, w.FormatData(*forecastResp, "daily"))
+						ctx.JSON(200, w.FormatDailyData(*forecastResp, "daily"))
 					} else {
 						ctx.JSON(500, "A server error has occured")
 					}
@@ -52,7 +52,7 @@ func setRouter(conf []byte) *gin.Engine {
 					w := weather.Weather{Client: http.Client{}, Params: weather.NewForecastParams(configData.WeatherConfig)}
 					forecastResp := w.GetData("current")
 					if forecastResp != nil {
-						ctx.JSON(200, w.FormatData(*forecastResp, "current"))
+						ctx.JSON(200, w.FormatCurrentData(*forecastResp, "current"))
 					} else {
 						ctx.JSON(500, "A server error has occured")
 					}
