@@ -55,6 +55,7 @@ type HourlyResponse struct {
 	WindGusts           []float64 `json:"wind_gusts_10m"`
 	Precipitation       []float64 `json:"precipitation_probability"`
 	WeatherCode         []float64 `json:"weather_code"`
+	IsDay               []int32   `json:"is_day"`
 }
 
 type HourUnitsResponse struct {
@@ -65,8 +66,9 @@ type HourUnitsResponse struct {
 	WindSpeed           string `json:"wind_speed_10m"`
 	WindDirection       string `json:"wind_direction_10m"`
 	WindGusts           string `json:"wind_gusts_10m"`
-	Precipitation       string `json:"precipitation"`
+	Precipitation       string `json:"precipitation_probability"`
 	WeatherCode         string `json:"weather_code"`
+	IsDay               string `json:"is_day"`
 }
 
 type DailyResponse struct {
@@ -141,6 +143,7 @@ type HourlyForecast struct {
 	Precip        FloatData
 	WeatherCode   float64
 	Time          string
+	IsDay         int32
 }
 
 type FloatData struct {

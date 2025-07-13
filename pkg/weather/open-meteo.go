@@ -28,6 +28,7 @@ func NewForecastParams(conf config.WeatherConfig) ForecastParams {
 		"wind_gusts_10m",
 		"precipitation_probability",
 		"weather_code",
+		"is_day",
 	}
 	fp.daily = []string{
 		"temperature_2m_max",
@@ -184,6 +185,7 @@ func (w Weather) FormatHourlyData(fr ForecastResponse, fType string) HourlyPaylo
 			fmt.Println(err)
 		}
 		h.Time = hTime.Format(time.Kitchen)
+		h.IsDay = fr.HourlyData.IsDay[i]
 
 		f.Hourly = append(f.Hourly, h)
 	}
