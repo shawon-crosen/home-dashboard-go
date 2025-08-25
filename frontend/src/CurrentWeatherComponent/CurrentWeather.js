@@ -1,50 +1,45 @@
 import fstyle from "./forecast.module.css"
 
-export default function HourlyWeather({ data }) {
+export default function CurrentWeather({ data }) {
     return (
         <div class="flex-container">
-            {data.Hourly.map((hour, index) => (
-                <li class="flex-item" key={index}>
-                    <div className={fstyle.time}>
-                        <span className={fstyle.time}>
-                            {hour.Time}
-                        </span>
-                    </div>
+            {data.Current.map((current) => (
+                <div>
                     <div class= {fstyle.child}>
                         <span className={fstyle.temp}>
-                            {hour.Temp.Value}{hour.Temp.Unit}
+                            {current.Temp.Value}{current.Temp.Unit}
                         </span>
                     </div>
                     <div className={fstyle.child}>
                         <span className={fstyle.weatherstatus}>
-                            {getWeatherData(hour.WeatherCode)[0]}
+                            {getWeatherData(current.WeatherCode)[0]}
                         </span>
                     </div>
                     <div className={fstyle.child}>
                         <span>
                             <img
-                                src={`http://openweathermap.org/img/wn/${getWeatherData(hour.WeatherCode)[1]}${isDay(hour.IsDay)}@2x.png`}
+                                src={`http://openweathermap.org/img/wn/${getWeatherData(current.WeatherCode)[1]}${isDay(current.IsDay)}@2x.png`}
                             />
                         </span>
                     </div>
                     <div className={fstyle.weatherdetails}>
                         <span className={fstyle.weatherdetailschild}>Humidity</span>
-                        <span className={fstyle.weatherdetailschild}>{hour.Humidity.Value}{hour.Humidity.Unit}</span>
+                        <span className={fstyle.weatherdetailschild}>{current.Humidity.Value}{current.Humidity.Unit}</span>
                     </div>
                     <div className={fstyle.weatherdetails}>
                         <span className={fstyle.weatherdetailschild}>Wind Speed</span>
-                        <span className={fstyle.weatherdetailschild}>{hour.WindSpeed.Value}{hour.WindSpeed.Unit}</span>
+                        <span className={fstyle.weatherdetailschild}>{current.WindSpeed.Value}{current.WindSpeed.Unit}</span>
                     </div>
                     <div className={fstyle.weatherdetails}>
                         <span className={fstyle.weatherdetailschild}>Wind Gusts</span>
-                        <span className={fstyle.weatherdetailschild}> {hour.WindGusts.Value}{hour.WindGusts.Unit}</span>
+                        <span className={fstyle.weatherdetailschild}> {current.WindGusts.Value}{current.WindGusts.Unit}</span>
                     </div>
                     <div className={fstyle.weatherdetails}>
                         <span className={fstyle.weatherdetailschild}>Precipitation</span>
-                        <span className={fstyle.weatherdetailschild}>{hour.Precip.Value}{hour.Precip.Unit}</span>
+                        <span className={fstyle.weatherdetailschild}>{current.Precip.Value}{current.Precip.Unit}</span>
                     </div>
-                    <div className={fstyle.weathercode}>{hour.WeatherCode.Value}</div>
-                </li>
+                    <div className={fstyle.weathercode}>{current.WeatherCode.Value}</div>
+                </div>
             ))}
         </div>
     )

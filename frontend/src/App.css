@@ -40,14 +40,14 @@
    */
   flex-flow: row;
   /* Then we define how is distributed the remaining space */
-  background: linear-gradient(to bottom right, #60a5fa, #3b82f6);
+  background: transparent;
   align-items: center;
   justify-content: center;
   list-style: none;
 }
 
 .flex-item {
-  background: rgba(255, 255, 255, 0.2);
+  background: linear-gradient(to bottom right, #b1d2fa, #679ef7);
   border-radius: 1.5rem;
   padding: 2rem;
   width: 250px;
