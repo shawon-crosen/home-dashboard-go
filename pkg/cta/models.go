@@ -4,9 +4,14 @@ import (
 	"net/http"
 )
 
-type Station struct {
-	Client http.Client
-	Id     int
+type AllTrains struct {
+	Stations []int
+	ApiKey   string
+	Client   http.Client
+}
+
+type AllTrainsData struct {
+	StationResponse []TrainData
 }
 
 type StationResponse struct {
@@ -39,11 +44,6 @@ type Eta struct {
 	Latitude            string `json:"lat"`
 	Longitude           string `json:"lon"`
 	Heading             string `json:"heading"`
-}
-
-type StationData struct {
-	North map[string][]TrainData
-	South map[string][]TrainData
 }
 
 type TrainData struct {

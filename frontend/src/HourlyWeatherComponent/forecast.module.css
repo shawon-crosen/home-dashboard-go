@@ -1,0 +1,76 @@
+.time {
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: -15px;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.temp {
+  font-size: 3rem;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+.humidity {
+  display:block;
+}
+
+.relativehumidity {
+  display:block;
+}
+
+.apparenttemp {
+  display:block;
+}
+
+.cloudcover {
+  display:block;
+}
+
+.windspeed {
+  display:block;
+}
+
+.winddirection {
+  display:block;
+}
+
+.windgusts {
+  display:block;
+}
+
+.precip {
+  display:block;
+}
+
+.weatherstatus {
+  display:block;
+  margin-top: 15px;
+  font-size: 1.5rem;
+}
+
+.child {
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.weatherdetails {
+  display: flex;
+  flex-flow: row;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.weatherdetailschild {
+  display: flex;
+  flex-flow: row;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1.1rem;
+  font-weight: bold;
+}

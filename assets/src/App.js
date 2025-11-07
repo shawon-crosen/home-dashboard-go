@@ -1,23 +1,122 @@
-import logo from './logo.svg';
 import './App.css';
+import {
+  QueryClient,
+  QueryClientProvider,
+  useQuery,
+} from '@tanstack/react-query';
+
+const hourlyWeatherClient = new QueryClient()
+// const dailyWeatherClient = new QueryClient()
+// const currentWeatherClient = new QueryClient()
+// const trainClient = new QueryClient()
+
+function FetchHourlyWeather() {
+  const { isPending, error, data } = useQuery({
+    queryFn: () =>
+      fetch('api/weather/hourly').then(
+        (res) => res.json(),
+      ),
+  })
+
+  if (isPending) return 'Loading...'
+
+  if (error) return 'An error has ocurred ' + error.message
+
+  return(
+    <div>
+      {data.Hourly.map((hourly) => {
+        return(
+          <div key={hourly.Time} class="hourly-forecast">
+            <p>{hourly.Temp}</p>
+            <p>{hourly.Humidity}</p>
+            <p>{hourly.ApparentTemp}</p>
+            <p>{hourly.CloudCover}</p>
+            <p>{hourly.WindSpeed}</p>
+            <p>{hourly.WindDirection}</p>
+            <p>{hourly.WindGusts}</p>
+            <p>{hourly.Precip}</p>
+            <p>{hourly.WeatherCode}</p>
+          </div>
+        )
+      })}
+    </div>
+  )
+}
+
+function FetchDailyWeather() {
+  const { isPending, error, data } = useQuery({
+    queryFn: () =>
+      fetch('api/weather/daily').then(
+        (res) => res.json(),
+      ),
+  })
+
+  if (isPending) return 'Loading...'
+
+  if (error) return 'An error has ocurred ' + error.message
+
+  return(
+    <ul>
+      {JSON.stringify(data.Daily)}
+    </ul>
+  )
+}
+
+function FetchCurrentWeather() {
+  const { isPending, error, data } = useQuery({
+    queryFn: () =>
+      fetch('api/weather/current').then(
+        (res) => res.json(),
+      ),
+  })
+
+  if (isPending) return 'Loading...'
+
+  if (error) return 'An error has ocurred ' + error.message
+
+  return(
+    <ul>
+      {JSON.stringify(data.Current)}
+    </ul>
+  )
+}
+
+function FetchTrains() {
+  const {isPending, error, data} = useQuery({
+    queryFn: () =>
+      fetch('api/cta').then(
+        (res) => res.json(),
+      ),
+  })
+
+  if (isPending) return 'Loading...'
+
+  if (error) return 'An error has occurred ' + error.message
+
+
+
+  return(
+    <ul>
+      {JSON.stringify(data.StationResponse)}
+    </ul>
+  )
+}
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="Dashboard">
+      <QueryClientProvider client={hourlyWeatherClient}>
+        <FetchHourlyWeather />
+      </QueryClientProvider>
+      {/* <QueryClientProvider client={dailyWeatherClient}>
+        <FetchDailyWeather />
+      </QueryClientProvider>
+      <QueryClientProvider client={currentWeatherClient}>
+        <FetchCurrentWeather />
+      </QueryClientProvider>
+      <QueryClientProvider client={trainClient}>
+        <FetchTrains />
+      </QueryClientProvider> */}
     </div>
   );
 }
