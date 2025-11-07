@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"slices"
 	"strings"
 	"time"
 
@@ -40,6 +41,7 @@ func NewForecastParams(conf config.WeatherConfig) ForecastParams {
 		"sunset",
 		"wind_speed_10m_max",
 		"wind_gusts_10m_max",
+		"temperature_2m_mean",
 	}
 	fp.current = []string{
 		"temperature_2m",
@@ -51,6 +53,7 @@ func NewForecastParams(conf config.WeatherConfig) ForecastParams {
 		"wind_gusts_10m",
 		"precipitation",
 		"weather_code",
+		"is_day",
 	}
 	fp.tempUnit = conf.TempUnit
 	fp.windSpeedUnit = conf.WindSpeedUnit
@@ -131,12 +134,19 @@ func (w Weather) GetData(fType string) *ForecastResponse {
 	}
 
 	req.URL.RawQuery = q.Encode()
+	fmt.Println("QUERY: ", req.URL.RawQuery)
 
 	resp, err := w.Client.Get(req.URL.String())
 
 	if err != nil {
-		log.Println(err)
-		return nil
+		fmt.Println(err)
+	}
+
+	known_errors := []int{404, 400}
+
+	if slices.Contains(known_errors, resp.StatusCode) {
+		fmt.Println(q)
+		fmt.Println(resp)
 	}
 
 	defer resp.Body.Close()
@@ -153,7 +163,7 @@ func (w Weather) GetData(fType string) *ForecastResponse {
 func (w Weather) FormatHourlyData(fr ForecastResponse, fType string) HourlyPayload {
 	f := HourlyPayload{}
 
-	for i := 2; i < 16; i += 2 {
+	for i := 2; i < 10; i += 2 {
 		h := HourlyForecast{}
 		h.Temp.Value = fr.HourlyData.Temperature[i]
 		h.Temp.Unit = fr.HourlyUnits.Temperature
@@ -195,8 +205,11 @@ func (w Weather) FormatHourlyData(fr ForecastResponse, fType string) HourlyPaylo
 
 func (w Weather) FormatDailyData(fr ForecastResponse, fType string) DailyPayload {
 	f := DailyPayload{}
-	for j := 0; j < 7; j++ {
+	for j := 1; j < 5; j++ {
 		d := DailyForecast{}
+
+		d.TempMean.Value = fr.DailyData.TemperatureMean[j]
+		d.TempMean.Unit = fr.DailyUnits.TemperatureMean
 
 		d.TempMax.Value = fr.DailyData.TemperatureMax[j]
 		d.TempMax.Unit = fr.DailyUnits.TemperatureMax
@@ -222,6 +235,9 @@ func (w Weather) FormatDailyData(fr ForecastResponse, fType string) DailyPayload
 		d.WindSpeedMax.Value = fr.DailyData.WindSpeedMax[j]
 		d.WindSpeedMax.Unit = fr.DailyUnits.WindSpeedMax
 
+		date, _ := time.Parse("2006-01-02T15:04", fr.DailyData.Sunrise[j])
+		d.Date = date.Weekday().String()
+
 		f.Daily = append(f.Daily, d)
 	}
 
@@ -231,32 +247,32 @@ func (w Weather) FormatDailyData(fr ForecastResponse, fType string) DailyPayload
 func (w Weather) FormatCurrentData(fr ForecastResponse, fType string) CurrentPayload {
 	f := CurrentPayload{}
 
-	c := CurrentForecast{}
+	f.Current.Temp.Value = fr.CurrentData.Temperature
+	f.Current.Temp.Unit = fr.CurrentUnits.Temperature
 
-	c.Temp.Value = fr.CurrentData.Temperature
-	c.Temp.Unit = fr.CurrentUnits.Temperature
+	f.Current.ApparentTemp.Value = fr.CurrentData.ApparentTemperature
+	f.Current.ApparentTemp.Unit = fr.CurrentUnits.ApparentTemperature
 
-	c.ApparentTemp.Value = fr.CurrentData.ApparentTemperature
-	c.ApparentTemp.Unit = fr.CurrentUnits.ApparentTemperature
+	f.Current.CloudCover.Value = fr.CurrentData.CloudCover
+	f.Current.CloudCover.Unit = fr.CurrentUnits.CloudCover
 
-	c.CloudCover.Value = fr.CurrentData.CloudCover
-	c.CloudCover.Unit = fr.CurrentUnits.CloudCover
+	f.Current.Humidity.Value = fr.CurrentData.RelativeHumidity
+	f.Current.Humidity.Unit = fr.CurrentUnits.RelativeHumidity
 
-	c.Humidity.Value = fr.CurrentData.RelativeHumidity
-	c.Humidity.Unit = fr.CurrentUnits.RelativeHumidity
+	f.Current.Precip.Value = fr.CurrentData.Precipitation
+	f.Current.Precip.Unit = fr.CurrentUnits.Precipitation
 
-	c.Precip.Value = fr.CurrentData.Precipitation
-	c.Precip.Unit = fr.CurrentUnits.Precipitation
+	f.Current.WeatherCode = fr.CurrentData.WeatherCode
 
-	c.WeatherCode = fr.CurrentData.WeatherCode
+	f.Current.WindDirection = windDirection(fr.CurrentData.WindDirection)
 
-	c.WindDirection = windDirection(fr.CurrentData.WindDirection)
+	f.Current.WindGusts.Value = fr.CurrentData.WindGusts
+	f.Current.WindGusts.Unit = fr.CurrentUnits.WindGusts
 
-	c.WindGusts.Value = fr.CurrentData.WindGusts
-	c.WindGusts.Unit = fr.CurrentUnits.WindGusts
+	f.Current.WindSpeed.Value = fr.CurrentData.WindSpeed
+	f.Current.WindSpeed.Unit = fr.CurrentUnits.WindSpeed
 
-	c.WindSpeed.Value = fr.CurrentData.WindSpeed
-	c.WindSpeed.Unit = fr.CurrentUnits.WindSpeed
+	f.Current.IsDay = fr.CurrentData.IsDay
 
 	return f
 }

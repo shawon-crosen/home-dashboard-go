@@ -1,49 +1,49 @@
 import fstyle from "./forecast.module.css"
 
-export default function HourlyWeather({ data }) {
+export default function DailyWeather({ data }) {
     return (
         // <div class="flex-container">
-        data.Hourly.map((hour, index) => (
-            <li class="flex-item" key={index}>
+        data.Daily.map((day, index) => (
+            <li class="flex-item-d" key={index}>
                 <div className={fstyle.time}>
                     <span className={fstyle.time}>
-                        {hour.Time}
+                        {day.Date}
                     </span>
                 </div>
                 <div class= {fstyle.child}>
                     <span className={fstyle.temp}>
-                        {hour.Temp.Value}{hour.Temp.Unit}
+                        {day.TempMean.Value}{day.TempMean.Unit}
                     </span>
                 </div>
                 <div className={fstyle.child}>
                     <span className={fstyle.weatherstatus}>
-                        {getWeatherData(hour.WeatherCode)[0]}
+                        {getWeatherData(day.WeatherCode)[0]}
                     </span>
                 </div>
                 <div className={fstyle.child}>
                     <span>
                         <img
-                            src={`http://openweathermap.org/img/wn/${getWeatherData(hour.WeatherCode)[1]}${isDay(hour.IsDay)}@2x.png`}
+                            src={`http://openweathermap.org/img/wn/${getWeatherData(day.WeatherCode)[1]}d@2x.png`}
                         />
                     </span>
                 </div>
-                <div className={fstyle.weatherdetails}>
+                {/* <div className={fstyle.weatherdetails}>
                     <span className={fstyle.weatherdetailschild}>Feels Like</span>
-                    <span className={fstyle.weatherdetailschild}>{hour.ApparentTemp.Value}{hour.ApparentTemp.Unit}</span>
-                </div>
+                    <span className={fstyle.weatherdetailschild}>{day.ApparentTemp.Value}{day.ApparentTemp.Unit}</span>
+                </div> */}
                 <div className={fstyle.weatherdetails}>
                     <span className={fstyle.weatherdetailschild}>Wind Speed</span>
-                    <span className={fstyle.weatherdetailschild}>{hour.WindSpeed.Value}{hour.WindSpeed.Unit}</span>
+                    <span className={fstyle.weatherdetailschild}>{day.WindSpeedMax.Value}{day.WindSpeedMax.Unit}</span>
                 </div>
                 <div className={fstyle.weatherdetails}>
                     <span className={fstyle.weatherdetailschild}>Wind Gusts</span>
-                    <span className={fstyle.weatherdetailschild}> {hour.WindGusts.Value}{hour.WindGusts.Unit}</span>
+                    <span className={fstyle.weatherdetailschild}> {day.WindGustsMax.Value}{day.WindGustsMax.Unit}</span>
                 </div>
                 <div className={fstyle.weatherdetails}>
                     <span className={fstyle.weatherdetailschild}>Precipitation</span>
-                    <span className={fstyle.weatherdetailschild}>{hour.Precip.Value}{hour.Precip.Unit}</span>
+                    <span className={fstyle.weatherdetailschild}>{day.PrecipProbability.Value}{day.PrecipProbability.Unit}</span>
                 </div>
-                <div className={fstyle.weathercode}>{hour.WeatherCode.Value}</div>
+                <div className={fstyle.weathercode}>{day.WeatherCode.Value}</div>
             </li>
         ))
         // </div>

@@ -4,18 +4,19 @@
   justify-content: center;
   align-items: center;
   margin-top: -15px;
-  font-size: 1.5rem;
+  font-size: 3rem;
   font-weight: bold;
 }
 
 .temp {
-  font-size: 3rem;
+  font-size: 9rem;
   font-weight: bold;
   margin-top: 10px;
 }
 
 .humidity {
   display:block;
+  font-size: 3rem
 }
 
 .relativehumidity {
@@ -49,7 +50,7 @@
 .weatherstatus {
   display:block;
   margin-top: 15px;
-  font-size: 1.5rem;
+  font-size: 3rem;
 }
 
 .child {
@@ -71,5 +72,5 @@
   flex-flow: row;
   justify-content: space-between;
   align-items: center;
-  font-size: 1.1rem;
+  font-size: 3rem;
 }

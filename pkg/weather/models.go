@@ -72,6 +72,7 @@ type HourUnitsResponse struct {
 }
 
 type DailyResponse struct {
+	TemperatureMean              []float64 `json:"temperature_2m_mean"`
 	TemperatureMax               []float64 `json:"temperature_2m_max"`
 	TemperatureMin               []float64 `json:"temperature_2m_min"`
 	PrecipitationTotal           []float64 `json:"precipitation_sum"`
@@ -84,6 +85,7 @@ type DailyResponse struct {
 }
 
 type DailyUnitsResponse struct {
+	TemperatureMean              string `json:"temperature_2m_mean"`
 	TemperatureMax               string `json:"temperature_2m_max"`
 	TemperatureMin               string `json:"temperature_2m_min"`
 	PrecipitationTotal           string `json:"precipitation_sum"`
@@ -106,6 +108,7 @@ type CurrentResponse struct {
 	WindGusts           float64 `json:"wind_gusts_10m"`
 	Precipitation       float64 `json:"precipitation"`
 	WeatherCode         float64 `json:"weather_code"`
+	IsDay               int32   `json:"is_day"`
 }
 
 type CurrentUnitsResponse struct {
@@ -118,6 +121,7 @@ type CurrentUnitsResponse struct {
 	WindGusts           string `json:"wind_gusts_10m"`
 	Precipitation       string `json:"precipitation"`
 	WeatherCode         string `json:"weather_code"`
+	Isday               string `json:"is_day"`
 }
 
 type HourlyPayload struct {
@@ -152,6 +156,7 @@ type FloatData struct {
 }
 
 type DailyForecast struct {
+	TempMean          FloatData
 	TempMax           FloatData
 	TempMin           FloatData
 	PrecipTotal       FloatData
@@ -161,6 +166,7 @@ type DailyForecast struct {
 	Sunset            time.Time
 	WindSpeedMax      FloatData
 	WindGustsMax      FloatData
+	Date              string
 }
 
 type CurrentForecast struct {
@@ -173,4 +179,5 @@ type CurrentForecast struct {
 	WindGusts     FloatData
 	Precip        FloatData
 	WeatherCode   float64
+	IsDay         int32
 }

@@ -1,16 +1,16 @@
 package main
 
 import (
-	"io/ioutil"
 	"log"
+	"os"
 	"path/filepath"
 
 	"github.com/shawon-crosen/dashboard-go/pkg/server"
 )
 
 func main() {
-	path, err := filepath.Abs("config.yaml")
-	config, err := ioutil.ReadFile(path)
+	path, err := filepath.Abs("../config.yaml")
+	config, err := os.ReadFile(path)
 
 	if err != nil {
 		log.Println(err)
