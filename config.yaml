@@ -1,0 +1,7 @@
+weather:
+  latitude: 41.881944
+  longitude: -87.627778
+  temperature_unit: fahrenheit
+  speed_unit: mph
+  precipitation_unit: inch
+  timezone: America/Chicago

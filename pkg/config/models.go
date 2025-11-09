@@ -2,7 +2,6 @@ package config
 
 type Config struct {
 	WeatherConfig WeatherConfig `yaml:"weather"`
-	CtaConfig     CtaConfig     `yaml:"cta"`
 }
 
 type WeatherConfig struct {
@@ -12,9 +11,4 @@ type WeatherConfig struct {
 	WindSpeedUnit string  `yaml:"speed_unit"`
 	PrecipUnit    string  `yaml:"precipitation_unit"`
 	TimeZone      string  `yaml:"timezone"`
-}
-
-type CtaConfig struct {
-	Stations []int  `yaml:"station_ids"`
-	Api_key  string `yaml:"api_key"`
 }
