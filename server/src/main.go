@@ -5,7 +5,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/shawon-crosen/dashboard-go/pkg/server"
+	"github.com/shawon-crosen/dashboard-go/server/pkg/server"
 )
 
 func main() {

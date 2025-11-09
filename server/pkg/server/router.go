@@ -4,8 +4,8 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/shawon-crosen/dashboard-go/pkg/config"
-	"github.com/shawon-crosen/dashboard-go/pkg/weather"
+	"github.com/shawon-crosen/dashboard-go/server/pkg/config"
+	"github.com/shawon-crosen/dashboard-go/server/pkg/weather"
 )
 
 func setRouter(conf []byte) *gin.Engine {

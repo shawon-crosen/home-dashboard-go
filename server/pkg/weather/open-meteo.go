@@ -9,7 +9,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/shawon-crosen/dashboard-go/pkg/config"
+	"github.com/shawon-crosen/dashboard-go/server/pkg/config"
 )
 
 const url = "https://api.open-meteo.com/v1/forecast"
