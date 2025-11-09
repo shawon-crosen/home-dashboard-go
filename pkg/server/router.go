@@ -5,7 +5,6 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/shawon-crosen/dashboard-go/pkg/config"
-	"github.com/shawon-crosen/dashboard-go/pkg/cta"
 	"github.com/shawon-crosen/dashboard-go/pkg/weather"
 )
 
@@ -60,16 +59,6 @@ func setRouter(conf []byte) *gin.Engine {
 				})
 			}
 		}
-
-		api.GET("/cta", func(ctx *gin.Context) {
-			trains := cta.AllTrains{Client: http.Client{}, ApiKey: configData.CtaConfig.Api_key, Stations: configData.CtaConfig.Stations}
-			tResp := trains.GetTrains()
-			if tResp != nil {
-				ctx.JSON(200, trains.FormatData(*tResp))
-			} else {
-				ctx.JSON(500, "A server error has occured")
-			}
-		})
 	}
 
 	router.NoRoute(func(ctx *gin.Context) { ctx.JSON(http.StatusNotFound, gin.H{}) })
