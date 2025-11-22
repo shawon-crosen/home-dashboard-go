@@ -42,6 +42,7 @@ func NewForecastParams(conf config.WeatherConfig) ForecastParams {
 		"wind_speed_10m_max",
 		"wind_gusts_10m_max",
 		"temperature_2m_mean",
+		"uv_index_max",
 	}
 	fp.current = []string{
 		"temperature_2m",
@@ -237,6 +238,9 @@ func (w Weather) FormatDailyData(fr ForecastResponse, fType string) DailyPayload
 
 		date, _ := time.Parse("2006-01-02T15:04", fr.DailyData.Sunrise[j])
 		d.Date = date.Weekday().String()
+
+		d.UVIndex.Value = fr.DailyData.UvIndex[j]
+		d.UVIndex.Unit = fr.DailyUnits.UVIndex
 
 		f.Daily = append(f.Daily, d)
 	}

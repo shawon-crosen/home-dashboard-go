@@ -43,6 +43,10 @@ export default function DailyWeather({ data }) {
                     <span className={fstyle.weatherdetailschild}>Precipitation</span>
                     <span className={fstyle.weatherdetailschild}>{day.PrecipProbability.Value}{day.PrecipProbability.Unit}</span>
                 </div>
+                <div className={fstyle.weatherdetails}>
+                    <span className={fstyle.weatherdetailschild}>UV Index</span>
+                    <span className={fstyle.weatherdetailschild}>{day.UVIndex.Value}{day.UVIndex.Unit}</span>
+                </div>
                 <div className={fstyle.weathercode}>{day.WeatherCode.Value}</div>
             </li>
         ))

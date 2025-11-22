@@ -64,23 +64,25 @@ function FetchCurrentWeather() {
 
 function App() {
   return (
-    <div class="box">
-      <div class="flex-container">
-        <QueryClientProvider client={currentWeatherClient}>
-          <FetchCurrentWeather />
-        </QueryClientProvider>
+    <div>
+      <div class="box">
+        <div class="flex-container">
+          <QueryClientProvider client={currentWeatherClient}>
+            <FetchCurrentWeather />
+          </QueryClientProvider>
+        </div>
+        <div class="flex-row">
+          <QueryClientProvider client={hourlyWeatherClient}>
+            <FetchHourlyWeather />
+          </QueryClientProvider>
+          <QueryClientProvider client={dailyWeatherClient}>
+            <FetchDailyWeather />
+          </QueryClientProvider>
+        </div>
       </div>
-      <div class="flex-row">
-        <QueryClientProvider client={hourlyWeatherClient}>
-          <FetchHourlyWeather />
-        </QueryClientProvider>
-        <QueryClientProvider client={dailyWeatherClient}>
-          <FetchDailyWeather />
-        </QueryClientProvider>
+      <div>
+        "SOME TEXT"
       </div>
-      {/* <div class="flex-row">
-        
-      </div> */}
     </div>
   );
 }
