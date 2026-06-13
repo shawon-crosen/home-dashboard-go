@@ -82,6 +82,7 @@ type DailyResponse struct {
 	Sunset                       []string  `json:"sunset"`
 	WindSpeedMax                 []float64 `json:"wind_speed_10m_max"`
 	WindGustsMax                 []float64 `json:"wind_gusts_10m_max"`
+	UvIndex                      []float64 `json:"uv_index_max"`
 }
 
 type DailyUnitsResponse struct {
@@ -95,6 +96,7 @@ type DailyUnitsResponse struct {
 	Sunset                       string `json:"sunset"`
 	WindSpeedMax                 string `json:"wind_speed_10m_max"`
 	WindGustsMax                 string `json:"wind_gusts_10m_max"`
+	UVIndex                      string `json:"uv_index_max"`
 }
 
 type CurrentResponse struct {
@@ -167,6 +169,7 @@ type DailyForecast struct {
 	WindSpeedMax      FloatData
 	WindGustsMax      FloatData
 	Date              string
+	UVIndex           FloatData
 }
 
 type CurrentForecast struct {

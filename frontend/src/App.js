@@ -7,10 +7,12 @@ import {
 import HourlyWeather from "./HourlyWeatherComponent/HourlyWeather.js"
 import CurrentWeather from "./CurrentWeatherComponent/CurrentWeather.js"
 import DailyWeather from './DailyWeatherComponent/DailyWeather.js';
+import Quote from './QuoteComponent/Quote.js';
 
 const hourlyWeatherClient = new QueryClient()
 const dailyWeatherClient = new QueryClient()
 const currentWeatherClient = new QueryClient()
+const quoteClient = new QueryClient()
 
 function FetchHourlyWeather() {
   const { isPending, error, data } = useQuery({
@@ -62,25 +64,47 @@ function FetchCurrentWeather() {
   )
 }
 
+function FetchQuotes() {
+  const { isPending, error, data } = useQuery({
+    queryFn: () =>
+      fetch('api/quotes/random').then(
+        (res) => res.json(),
+      ),
+      refetchInterval: 86400000,
+  })
+
+  if (isPending) return 'Loading...'
+
+  if (error) return 'An error has ocurred ' + error.message
+
+  return(
+    < Quote quote={data} />
+  )
+}
+
 function App() {
   return (
-    <div class="box">
-      <div class="flex-container">
-        <QueryClientProvider client={currentWeatherClient}>
-          <FetchCurrentWeather />
+    <div>
+      <div class="box">
+        <div class="flex-container">
+          <QueryClientProvider client={currentWeatherClient}>
+            <FetchCurrentWeather />
+          </QueryClientProvider>
+        </div>
+        <div class="flex-row">
+          <QueryClientProvider client={hourlyWeatherClient}>
+            <FetchHourlyWeather />
+          </QueryClientProvider>
+          <QueryClientProvider client={dailyWeatherClient}>
+            <FetchDailyWeather />
+          </QueryClientProvider>
+        </div>
+      </div>
+      <div class="box">
+        <QueryClientProvider client={quoteClient}>
+          <FetchQuotes />
         </QueryClientProvider>
       </div>
-      <div class="flex-row">
-        <QueryClientProvider client={hourlyWeatherClient}>
-          <FetchHourlyWeather />
-        </QueryClientProvider>
-        <QueryClientProvider client={dailyWeatherClient}>
-          <FetchDailyWeather />
-        </QueryClientProvider>
-      </div>
-      {/* <div class="flex-row">
-        
-      </div> */}
     </div>
   );
 }
