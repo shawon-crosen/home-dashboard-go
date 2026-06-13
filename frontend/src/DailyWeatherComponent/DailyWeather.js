@@ -12,7 +12,7 @@ export default function DailyWeather({ data }) {
                 </div>
                 <div class= {fstyle.child}>
                     <span className={fstyle.temp}>
-                        {day.TempMean.Value}{day.TempMean.Unit}
+                        {day.TempMax.Value}{day.TempMax.Unit}
                     </span>
                 </div>
                 <div className={fstyle.child}>

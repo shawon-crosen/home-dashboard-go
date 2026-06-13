@@ -135,7 +135,6 @@ func (w Weather) GetData(fType string) *ForecastResponse {
 	}
 
 	req.URL.RawQuery = q.Encode()
-	fmt.Println("QUERY: ", req.URL.RawQuery)
 
 	resp, err := w.Client.Get(req.URL.String())
 

@@ -5,6 +5,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/shawon-crosen/dashboard-go/server/pkg/config"
+	"github.com/shawon-crosen/dashboard-go/server/pkg/quotes"
 	"github.com/shawon-crosen/dashboard-go/server/pkg/weather"
 )
 
@@ -56,6 +57,21 @@ func setRouter(conf []byte) *gin.Engine {
 						ctx.JSON(500, "A server error has occured")
 					}
 
+				})
+			}
+		}
+		quote := api.Group("/quotes")
+		{
+			randQuote := quote.Group("random")
+			{
+				randQuote.GET("", func(ctx *gin.Context) {
+					q := quotes.Quotes{Client: http.Client{}}
+					qResp := q.QueryForQuote()
+					if qResp != nil {
+						ctx.JSON(200, qResp)
+					} else {
+						ctx.JSON(500, "A server error has occured")
+					}
 				})
 			}
 		}

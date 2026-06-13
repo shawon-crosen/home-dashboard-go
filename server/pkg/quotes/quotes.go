@@ -4,10 +4,11 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"math/rand/v2"
 	"net/http"
 )
 
-const url = "https://thequoteshub.com/api/quotes"
+const url = "https://thequoteshub.com/api/"
 
 type Quotes struct {
 	Client http.Client
@@ -27,18 +28,18 @@ type Pagination struct {
 }
 
 type Quote struct {
-	Author   string
-	AuthorID string
-	ID       int
-	Tags     []string
-	Text     string
+	Author   string   `json:"author"`
+	AuthorID string   `json:"author_id"`
+	ID       int      `json:"id"`
+	Tags     []string `json:"tags"`
+	Text     string   `json:"text"`
 }
 
-func (q Quotes) getQuotes() (Response, error) {
+func (q Quotes) getQuoteNum() int {
 	target := Response{}
-	req, err := http.NewRequest("GET", url, nil)
+	req, err := http.NewRequest("GET", url+"tags/"+"art", nil)
 	if err != nil {
-		return target, err
+		return 0
 	}
 
 	resp, err := q.Client.Get(req.URL.String())
@@ -55,17 +56,19 @@ func (q Quotes) getQuotes() (Response, error) {
 		log.Println(err)
 	}
 
-	return target, nil
+	return target.Pagination.Total
 }
 
-func (q Quotes) getQuotesByAuthor(aID string) (Response, error) {
+func (q Quotes) getQuotes(size int) (Response, error) {
 	target := Response{}
-	req, err := http.NewRequest("GET", url+"/authors"+"/"+aID, nil)
+	req, err := http.NewRequest("GET", url+"tags"+fmt.Sprintf("/art?page=1&page_size=%v", size), nil)
 	if err != nil {
 		return target, err
 	}
 
+	query := req.URL.Query()
 	resp, err := q.Client.Get(req.URL.String())
+	req.URL.RawQuery = query.Encode()
 
 	if err != nil {
 		fmt.Println(err)
@@ -80,4 +83,23 @@ func (q Quotes) getQuotesByAuthor(aID string) (Response, error) {
 	}
 
 	return target, nil
+}
+
+func (q Quotes) QueryForQuote() *Quote {
+	size := q.getQuoteNum()
+	if size < 1 {
+		fmt.Println("No quotes")
+	}
+	quotes, err := q.getQuotes(size)
+	if err != nil {
+		fmt.Println("Error getting quotes")
+	}
+
+	r := rand.IntN(size)
+
+	if quotes.Quotes[r].Author == "Neil Gaiman" {
+		r = rand.IntN(size)
+	}
+
+	return &quotes.Quotes[r]
 }
