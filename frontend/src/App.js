@@ -85,25 +85,27 @@ function FetchQuotes() {
 function App() {
   return (
     <div>
-      <div class="box">
-        <div class="flex-container">
-          <QueryClientProvider client={currentWeatherClient}>
-            <FetchCurrentWeather />
+      <div class="parent">
+        <div class="box">
+          <div class="flex-container">
+            <QueryClientProvider client={currentWeatherClient}>
+              <FetchCurrentWeather />
+            </QueryClientProvider>
+          </div>
+          <div class="flex-row">
+            <QueryClientProvider client={hourlyWeatherClient}>
+              <FetchHourlyWeather />
+            </QueryClientProvider>
+            <QueryClientProvider client={dailyWeatherClient}>
+              <FetchDailyWeather />
+            </QueryClientProvider>
+          </div>
+        </div>
+        <div class="qbox">
+          <QueryClientProvider client={quoteClient}>
+            <FetchQuotes />
           </QueryClientProvider>
         </div>
-        <div class="flex-row">
-          <QueryClientProvider client={hourlyWeatherClient}>
-            <FetchHourlyWeather />
-          </QueryClientProvider>
-          <QueryClientProvider client={dailyWeatherClient}>
-            <FetchDailyWeather />
-          </QueryClientProvider>
-        </div>
-      </div>
-      <div class="box">
-        <QueryClientProvider client={quoteClient}>
-          <FetchQuotes />
-        </QueryClientProvider>
       </div>
     </div>
   );

@@ -2,7 +2,7 @@ import fstyle from "./quote.module.css"
 
 export default function Quote({ quote }) {
     return (
-        <div class="flex-row">
+        <div class="flex-container">
             <div className={fstyle.author}>
                 {quote.author}
             </div>

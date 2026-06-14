@@ -28,6 +28,17 @@
   color: #61dafb;
 }
 
+.parent {
+  height: auto;
+  width: auto;
+  background-color: #b9cffc;
+  display: flex;
+  min-height: 100vh;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
 .box {
   height: auto;
   width: auto;
@@ -37,7 +48,21 @@
   justify-content: center;
   align-items: center;
   list-style: none;
+  position: relative;
 }
+
+.qbox {
+  height: auto;
+  width: auto;
+  background-color: #b9cffc;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  list-style: none;
+  position: relative;
+}
+
 
 .flex-container {
   /* We first create a flex layout context */
@@ -59,7 +84,7 @@
 
 
 .flex-item {
-  background: linear-gradient(to bottom right, #b1d2fa, #679ef7);
+  background: linear-gradient(to bottom right, #95bdef, #679ef7);
   border-radius: 1.5rem;
   padding: 2rem;
   width: 250px;
@@ -79,7 +104,7 @@
 }
 
 .flex-item-c {
-  background: linear-gradient(to bottom right, #b1d2fa, #679ef7);
+  background: linear-gradient(to bottom right, #95bdef, #679ef7);
   border-radius: 1.5rem;
   padding: 2rem;
   width: 500px;
