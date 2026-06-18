@@ -37,7 +37,7 @@ type Quote struct {
 
 func (q Quotes) getQuoteNum() int {
 	target := Response{}
-	req, err := http.NewRequest("GET", url+"tags/"+"art", nil)
+	req, err := http.NewRequest("GET", url+"authors/"+"Toni+Morrison", nil)
 	if err != nil {
 		return 0
 	}
@@ -59,9 +59,35 @@ func (q Quotes) getQuoteNum() int {
 	return target.Pagination.Total
 }
 
-func (q Quotes) getQuotes(size int) (Response, error) {
+func (q Quotes) getQuotesByTag(size int) (Response, error) {
 	target := Response{}
 	req, err := http.NewRequest("GET", url+"tags"+fmt.Sprintf("/art?page=1&page_size=%v", size), nil)
+	if err != nil {
+		return target, err
+	}
+
+	query := req.URL.Query()
+	resp, err := q.Client.Get(req.URL.String())
+	req.URL.RawQuery = query.Encode()
+
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	defer resp.Body.Close()
+
+	err = json.NewDecoder(resp.Body).Decode(&target)
+
+	if err != nil {
+		log.Println(err)
+	}
+
+	return target, nil
+}
+
+func (q Quotes) getQuotesByAuthor(size int) (Response, error) {
+	target := Response{}
+	req, err := http.NewRequest("GET", url+"authors"+fmt.Sprintf("/Toni+Morrison?page=1&page_size=%v", size), nil)
 	if err != nil {
 		return target, err
 	}
@@ -90,7 +116,7 @@ func (q Quotes) QueryForQuote() *Quote {
 	if size < 1 {
 		fmt.Println("No quotes")
 	}
-	quotes, err := q.getQuotes(size)
+	quotes, err := q.getQuotesByAuthor(size)
 	if err != nil {
 		fmt.Println("Error getting quotes")
 	}
