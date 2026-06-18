@@ -37,6 +37,7 @@ function FetchDailyWeather() {
       fetch('api/weather/daily').then(
         (res) => res.json(),
       ),
+      refetchInterval: 30000,
   })
 
   if (isPending) return 'Loading...'
