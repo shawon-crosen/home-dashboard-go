@@ -1,6 +1,6 @@
 weather:
-  latitude: 41.881944
-  longitude: -87.627778
+  latitude: 41.869548
+  longitude: -87.631368
   temperature_unit: fahrenheit
   speed_unit: mph
   precipitation_unit: inch
